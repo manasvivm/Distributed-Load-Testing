@@ -1,0 +1,20 @@
+
+    <div id="load">
+    <h1>Load Test Metrics</h1>
+    <ul>
+    {% for node, metrics in nodes.items() %}
+                        <li style="background-color: #f0f0f0; margin-top: 5px;">
+                            Test ID: {{ test_id }}<br>
+            Report ID:{{ report_id }}<br>
+            Node ID:{{node}}<br>
+            Mean Latency:{{metrics['mean_latency']}}<br>
+            Min Latency:{{metrics['min_latency']}}<br>
+            Max Latency:{{metrics['max_latency']}}<br>
+            Latency: {{ metrics['latency'] }}<br>
+                        </li>
+    {% endfor %}
+    </ul>
+    </div>
+
+
+    

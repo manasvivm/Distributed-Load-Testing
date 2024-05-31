@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <title>Orchestrator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        form {
+            background-color: #f0f0f0; /* Light grey background color */
+            border: 1px solid #ddd; /* Light grey border color */
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Light shadow effect */
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 3px;
+            margin-bottom: 5px;
+            box-sizing: border-box;
+            border: 1px solid #ccc; /* Light grey border color */
+            border-radius: 10px;
+        }
+
+        .form-check-input {
+            background-color: white; /* White background color for radio buttons */
+            border: 1px solid #000; /* Black border color for radio buttons */
+            width: 20px; /* Adjust width as needed */
+            height: 20px; /* Adjust height as needed */
+            margin-right: 5px; /* Add some space between radio button and label */
+        }
+
+        .form-check-input:checked {
+            background-color: black; /* Black background color when selected */
+        }
+
+        button {
+            background-color: #404040;
+            color: white;
+            margin-top: 10px;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:focus {
+            outline: none; /* Remove the default focus style */
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        /* Added left padding for the test details part */
+        .test-details {
+            padding-left: 70px;
+        }
+
+    </style>
+    {{turbo()}}
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Orchestrator</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    <a class="nav-link" href="#">Features</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container mt-4">
+        <div class="row">
+            <!-- Form on the left (col-md-4 takes 35% of the screen) -->
+            <div class="col-md-4">
+                <form action="/" method="POST">
+                    <label>Test Type:</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="test_type" id="avalanche" value="AVALANCHE">
+                        <label class="form-check-label" for="avalanche">
+                            Avalanche
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="test_type" id="tsunami" value="TSUNAMI">
+                        <label class="form-check-label" for="tsunami">
+                            Tsunami
+                        </label>
+                    </div>
+
+                    <label for="test_message_delay">Message Delay:</label>
+                    <input type="text" name="test_message_delay" id="test_message_delay" required>
+
+                    <label for="message_count_per_driver">Message Count per Driver:</label>
+                    <input type="text" name="message_count_per_driver" id="message_count_per_driver" required>
+
+                    <button type="submit">Configure Test</button>
+                </form>
+            </div>
+            <!-- Test details on the right (col-md-8 takes the rest of the screen) -->
+            <div class="col-md-7 test-details">
+                <h2>Test Details</h2>
+                <ul>
+                    {% for test_id, test_config in test_details.items() %}
+                        <li style="background-color: #f0f0f0; margin-top: 5px;">
+                            <strong>Test ID:</strong> {{ test_id }}<br>
+                            <strong>Test Type:</strong> {{ test_config['test_type'] }}<br>
+                            <strong>Test Message Delay:</strong> {{ test_config['test_message_delay'] }}<br>
+                            <strong>Message Count per Driver:</strong> {{ test_config['message_count_per_driver'] }}<br>
+                            <form action="/trigger/{{ test_id }}" method="POST" style="background-color: #f0f0f0; border: 0px; margin-top: 5px; width: 250px; ">
+                                <button type="submit">Trigger Load Test</button>
+                            </form>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% include "Response.html"%}
+        {% block content%} 
+
+        {% endblock %}
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+</body>
+</html>
